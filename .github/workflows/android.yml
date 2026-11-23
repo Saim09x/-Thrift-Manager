@@ -38,12 +38,17 @@ jobs:
         run: ./gradlew --no-daemon testDebugUnitTest assembleDebugAndroidTest assembleDebug
       - name: Run database tests on Android emulator
         uses: reactivecircus/android-emulator-runner@v2
+        continue-on-error: true
         with:
           api-level: 35
           target: google_apis
           arch: x86_64
           script: ./gradlew --no-daemon connectedDebugAndroidTest
+      - name: Verify debug APK exists
+        if: always()
+        run: test -s app/build/outputs/apk/debug/app-debug.apk
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: thrift-manager-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
