@@ -20,9 +20,10 @@ jobs:
           distribution: temurin
           java-version: "17"
           cache: gradle
-      - uses: android-actions/setup-android@v3
       - name: Install Android SDK
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+        run: |
+          yes | sdkmanager --licenses
+          yes | sdkmanager "platforms;android-35" "build-tools;35.0.0" "system-images;android-35;google_apis;x86_64"
       - name: Run unit tests and build debug APK
         run: ./gradlew --no-daemon testDebugUnitTest assembleDebugAndroidTest assembleDebug
       - name: Run database tests on Android emulator
